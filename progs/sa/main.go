@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"shared"
 )
 
 func main() {
@@ -14,11 +13,7 @@ func main() {
 	genome := os.Args[1]
 	reads := os.Args[2]
 
-	suffixArray := shared.LsdRadixSort(genome)
-
-	for read := range reads {
-
-	}
+	//suffixArray := shared.LsdRadixSort(genome)
 
 	fmt.Println("Search in", genome, "for the reads in", reads)
 }
@@ -27,46 +22,47 @@ func upperBound(match int, high int, suffixArray []int, genome string, read stri
 	mid := high - (high-match)/2
 	low := match
 
-	for true {
+	for high != low {
 		saIndex := suffixArray[mid]
 
 		if low == high {
-			return low
+			return low + 1
 		}
 
 		if genome[saIndex:] > read {
+			if mid == high {
+				return low + 1
+			}
 			high = mid
 		} else {
 			low = mid + 1
 		}
 		mid = high - (high-low)/2
 	}
+	return high + 1
 }
+func lowerBound(match int, low int, suffixArray []int, genome string, read string) int {
+	mid := match - (match-low)/2
+	high := match
 
-func RunSingle(genome string, read []string) (int, int) {
-	suffixArray := shared.LsdRadixSort(genome)
-	return BinarySuffixArraySearch(genome, read, suffixArray)
-}
-
-func lowerBound(match int, high int, suffixArray []int, genome string, read string) int {
-	mid := high - (high-match)/2
-	low := match
-
-	for true {
+	for high != low {
 		saIndex := suffixArray[mid]
 
 		if low == high {
 			return low
 		}
-
 		if genome[saIndex:] < read {
+			if high == mid {
+				return low
+			}
 			high = mid
 		} else {
 			low = mid + 1
 		}
 		mid = high - (high-low)/2
+
 	}
-	return -1
+	return low - 1
 }
 
 func BinarySuffixArraySearch(genome string, read string, suffixArray []int) (int, int) {
@@ -76,15 +72,22 @@ func BinarySuffixArraySearch(genome string, read string, suffixArray []int) (int
 	high := len(suffixArray) - 1
 	//m := len(read)
 
-	for true {
+	for low != high {
+		fmt.Println(low, mid, high)
 		saIndex := suffixArray[mid]
-		if genome[saIndex:len(genome)-1] == read {
-			upperBound := upperBound(saIndex, high, suffixArray, genome, read)
-			lowerBound := lowerBound(saIndex, high, suffixArray, genome, read)
-			return lowerBound, upperBound
+
+		//check if match only on strings at least as long as read
+		if saIndex+len(read) < len(genome) {
+			if genome[saIndex:saIndex+len(read)] == read {
+				fmt.Println(genome[saIndex:len(genome)-1], "yiha")
+				upperBound := upperBound(mid, high, suffixArray, genome, read)
+				lowerBound := lowerBound(mid, low, suffixArray, genome, read)
+				return lowerBound, upperBound
+			}
 		}
 
 		if genome[saIndex:] > read {
+			fmt.Println(genome[saIndex:], read)
 			high = mid
 		} else {
 			low = mid + 1
