@@ -36,3 +36,13 @@ func Test_Output(t *testing.T) {
 	}
 
 }
+
+func Test_cmp_with_old_handin(t *testing.T) {
+
+	shared.SortFile("./testdata/output.txt")
+	shared.SortFile("./testdata/handin3_reference.txt")
+
+	if !shared.CmpFiles("./testdata/test_result.txt", "./testdata/h1_naive_results.txt") {
+		t.Errorf("files are not identical")
+	}
+}
