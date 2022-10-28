@@ -9,24 +9,27 @@ import (
 
 func Test_Output(t *testing.T) {
 
-	genome, read := "abababbbbabaaaab", "aa"
+	genome, read := "aababbaxbaxxxaaavbbbbbbbabbabbabbabbabbaaaacdsacdssfbbbaabbbabbbb$", "abb"
 
 	sa := shared.LsdRadixSort(genome)
-	fmt.Println(sa)
+	/*fmt.Println(sa)
 	for i, idx := range sa {
 		fmt.Println(i, genome[idx:])
-	}
-	lower, upper := BinarySuffixArraySearch(genome, read, sa)
+	}*/
+	lower, upper := shared.BinarySearch(genome, read, sa)
+	fmt.Println("exact matches are in the interval:", lower, "to", upper)
 	for _, v := range sa {
 		idx := sa[v]
+
+		//check if all suffixes in the interval matches and that all suffixes outside do not match.
 		if v >= lower && v < upper {
 			if genome[idx:len(read)+idx] != read {
-				t.Error("should be identical")
+				t.Error("They ARE NOT identical. But should be at idx:", v)
 			}
 		} else {
 			if sa[v]+len(read) < len(genome) {
 				if genome[idx:len(read)+idx] == read {
-					t.Error("should not be identical")
+					t.Error("They ARE identical. But should be at idx:", v)
 				}
 			}
 		}

@@ -61,10 +61,10 @@ func LsdRadixSort(x string) []int {
 	if x[len(x)-1] != '$' {
 		sb.WriteString(x)
 		sb.WriteByte('$')
+		x = sb.String()
 	}
-	x = sb.String()
-	sb.Reset()
 
+	sb.Reset()
 	//create initial sorting
 	idx := make([]int, len(x))
 	for i := range idx {
