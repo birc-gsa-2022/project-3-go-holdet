@@ -37,6 +37,7 @@ func Test_Output(t *testing.T) {
 
 }
 
+/*
 func Test_cmp_with_old_handin(t *testing.T) {
 
 	shared.SortFile("./testdata/output.txt")
@@ -46,3 +47,4 @@ func Test_cmp_with_old_handin(t *testing.T) {
 		t.Errorf("files are not identical")
 	}
 }
+*/
