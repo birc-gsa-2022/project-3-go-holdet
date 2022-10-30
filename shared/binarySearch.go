@@ -1,7 +1,6 @@
 package shared
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -21,7 +20,6 @@ func BinarySearch(genome string, read string, suffixArray []int) (int, int) {
 	if read == "" || len(read) > len(genome) {
 		return 0, 0
 	}
-	fmt.Println("we good")
 	upperBound := upperBound(suffixArray, genome, read)
 	lowerBound := lowerBound(suffixArray, genome, read)
 	if upperBound != lowerBound {
@@ -37,11 +35,8 @@ func upperBound(suffixArray []int, genome string, read string) int {
 
 	//we break when we are left with two values. The last element that matches, and the first element that does not.
 	for low < high-1 {
-		fmt.Println("up")
-		fmt.Println(low, high)
 		mid := low + (high-low)/2
 		saIndex := suffixArray[mid]
-		fmt.Println(genome[saIndex:], read)
 
 		if suffixArray[mid]+len(read) < len(genome) {
 			if genome[suffixArray[mid]:suffixArray[mid]+len(read)] == read {
@@ -77,11 +72,8 @@ func lowerBound(suffixArray []int, genome string, read string) int {
 
 	//we break when we are left with two values. The last element before match, and the first match.
 	for low < high-1 {
-		fmt.Println("down")
-		fmt.Println(low, high)
 		mid := low + (high-low)/2
 		saIndex := suffixArray[mid]
-		fmt.Println(genome[saIndex:], read)
 
 		if suffixArray[mid]+len(read) < len(genome) {
 			if genome[suffixArray[mid]:suffixArray[mid]+len(read)] == read {
