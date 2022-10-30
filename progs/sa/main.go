@@ -24,10 +24,9 @@ func main() {
 			panic(err)
 		}*/
 
-	for _, read := range p_reads {
-		for _, gen := range p_genomes {
-			sa := shared.LsdRadixSort(gen.Rec)
-
+	for _, gen := range p_genomes {
+		sa := shared.LsdRadixSort(gen.Rec)
+		for _, read := range p_reads {
 			start, end := shared.BinarySearch(gen.Rec, read.Rec, sa)
 			for i := start; i < end; i++ {
 				shared.Sam(read.Name, gen.Name, sa[i], read.Rec)
@@ -39,6 +38,4 @@ func main() {
 		}
 
 	}
-
-	fmt.Println("Search in", genome, "for the reads in", reads)
 }
