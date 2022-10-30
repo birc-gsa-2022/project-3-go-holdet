@@ -24,14 +24,15 @@ func main() {
 			panic(err)
 		}*/
 
-	for _, gen := range p_genomes {
-		sa := shared.LsdRadixSort(gen.Rec)
-		for _, read := range p_reads {
+	for _, read := range p_reads {
+		for _, gen := range p_genomes {
+			sa := shared.LsdRadixSort(gen.Rec)
+
 			start, end := shared.BinarySearch(gen.Rec, read.Rec, sa)
 			for i := start; i < end; i++ {
 				shared.Sam(read.Name, gen.Name, sa[i], read.Rec)
 				/*
-					res := shared.SamStub(read.Name, genome.Name, sa[i], read.Rec)
+					res := shared.SamStub(read.Name, gen.Name, sa[i], read.Rec)
 					fo.Write([]byte(res))
 				*/
 			}
