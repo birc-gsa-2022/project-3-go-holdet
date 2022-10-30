@@ -38,6 +38,28 @@ func Test_Output(t *testing.T) {
 
 }
 
+func TestVaryingAlphabets(t *testing.T) {
+	Alphabets := []shared.Alphabet{
+		shared.English, shared.DNA, shared.AB}
+
+	for _, v := range Alphabets {
+		genome, reads := shared.BuildSomeFastaAndFastq(300, 200, 20, v, 11)
+
+		parsedGenomes := shared.GeneralParserStub(genome, shared.Fasta, len(genome)+1)
+
+		parsedReads := shared.GeneralParserStub(reads, shared.Fastq, len(reads)+1)
+
+		for _, gen := range parsedGenomes {
+			sa := shared.LsdRadixSort(gen.Rec)
+			for _, read := range parsedReads {
+				lower, upper := shared.BinarySearch(genome, read.Rec, sa)
+				fmt.Println("exact matches are in the interval:", lower, "to", upper)
+			}
+		}
+
+	}
+}
+
 /*
 func Test_cmp_with_old_handin(t *testing.T) {
 
