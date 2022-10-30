@@ -9,14 +9,15 @@ import (
 
 func Test_Output(t *testing.T) {
 
-	genome, read := "aababbaxbaxxxaaavbbbbbbbabbabbabbabbabbaaaacdsacdssfbbbaabbbabbbb$", "abb"
+	genome, read := "aka", "aka"
 
 	sa := shared.LsdRadixSort(genome)
-	/*fmt.Println(sa)
+	fmt.Println(sa)
 	for i, idx := range sa {
 		fmt.Println(i, genome[idx:])
-	}*/
+	}
 	lower, upper := shared.BinarySearch(genome, read, sa)
+	fmt.Println(lower, upper)
 	fmt.Println("exact matches are in the interval:", lower, "to", upper)
 	for _, v := range sa {
 		idx := sa[v]

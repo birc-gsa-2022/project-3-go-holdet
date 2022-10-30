@@ -18,19 +18,21 @@ func main() {
 	p_genomes := shared.GeneralParser(genomes, shared.Fasta)
 	p_reads := shared.GeneralParser(reads, shared.Fastq)
 
-	/*fo, err := os.Create("./testdata/output.txt")
-	if err != nil {
-		panic(err)
-	}*/
+	/*
+		fo, err := os.Create("./testdata/output.txt")
+		if err != nil {
+			panic(err)
+		}
+	*/
 
 	for _, genome := range p_genomes {
 		sa := shared.LsdRadixSort(genome.Rec)
 		for _, read := range p_reads {
 			start, end := shared.BinarySearch(genome.Rec, read.Rec, sa)
 			for i := start; i < end; i++ {
-				shared.Sam(read.Name, genome.Name, i, read.Rec)
+				shared.Sam(read.Name, genome.Name, sa[i], read.Rec)
 				/*
-					res := shared.SamStub(read.Name, genome.Name, i, read.Rec)
+					res := shared.SamStub(read.Name, genome.Name, sa[i], read.Rec)
 					fo.Write([]byte(res))
 				*/
 			}
