@@ -97,7 +97,7 @@ func Test_cmp_with_old_handin(t *testing.T) {
 }
 */
 
-func TestMakeData(t *testing.T) {
+func TestMakeDataCons(t *testing.T) {
 	csvFile, err := os.Create("./testdata/construction_time.csv")
 	if err != nil {
 		log.Fatalf("failed creating file: %s", err)
@@ -108,7 +108,7 @@ func TestMakeData(t *testing.T) {
 	num_of_n := 0
 	time_sq := 0
 
-	for i := 1; i < 2; i++ {
+	for i := 1; i < 20; i++ {
 
 		num_of_n += 500
 		num_of_m := 1
@@ -132,5 +132,57 @@ func TestMakeData(t *testing.T) {
 
 			}
 		}
+	}
+}
+
+func TestMakeDataSearch(t *testing.T) {
+	csvFile, err := os.Create("./testdata/search_time.csv")
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+	csvwriter := csv.NewWriter(csvFile)
+	_ = csvwriter.Write([]string{"x_size", "quadratic"})
+
+	//num_of_n := 4000
+	num_of_m := 0
+	time_sq := 0
+
+	//always use the same genome in order to make the sa process go faster.
+	genomes, _ := shared.BuildSomeFastaAndFastq(30000, 0, 1, shared.A, 102)
+	parsedGenomes := shared.GeneralParserStub(genomes, shared.Fasta, 30000+1)
+
+	if len(parsedGenomes) != 1 {
+		t.Errorf("should only be 1.")
+	}
+	gen := parsedGenomes[0]
+	fmt.Println("creating sa")
+	sa := shared.LsdRadixSort(gen.Rec)
+	fmt.Println("sa created")
+	for i := 1; i < 50; i++ {
+
+		//num_of_n += 500
+		num_of_m += 500
+
+		_, reads := shared.BuildSomeFastaAndFastq(30000, num_of_m, 1, shared.A, 102)
+		parsedReads := shared.GeneralParserStub(reads, shared.Fastq, 4000*num_of_m+1)
+
+		for i := 0; i < 5; i++ {
+
+			for _, read := range parsedReads {
+				time_start := time.Now()
+				shared.BinarySearch(gen.Rec, read.Rec, sa)
+				time_end := int(time.Since(time_start))
+				time_sq += time_end
+			}
+
+			fmt.Println("time", int((time_sq)))
+			_ = csvwriter.Write([]string{strconv.Itoa(num_of_m), strconv.Itoa(time_sq)})
+
+			csvwriter.Flush()
+
+			time_sq = 0
+
+		}
+
 	}
 }
