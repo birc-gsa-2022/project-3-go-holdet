@@ -1,8 +1,13 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
+	"log"
+	"os"
+	"strconv"
 	"testing"
+	"time"
 
 	"birc.au.dk/gsa/shared"
 )
@@ -91,3 +96,41 @@ func Test_cmp_with_old_handin(t *testing.T) {
 	}
 }
 */
+
+func TestMakeData(t *testing.T) {
+	csvFile, err := os.Create("./testdata/construction_time.csv")
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+	csvwriter := csv.NewWriter(csvFile)
+	_ = csvwriter.Write([]string{"x_size", "quadratic"})
+
+	num_of_n := 0
+	time_sq := 0
+
+	for i := 1; i < 2; i++ {
+
+		num_of_n += 500
+		num_of_m := 1
+		genome, _ := shared.BuildSomeFastaAndFastq(num_of_n, 0, 1, shared.English, 78)
+		parsedGenomes := shared.GeneralParserStub(genome, shared.Fasta, num_of_n*num_of_m+1)
+		//parsedReads := shared.GeneralParserStub(reads, shared.Fastq, num_of_n*num_of_m+1)
+
+		for i := 0; i < 5; i++ {
+			for _, gen := range parsedGenomes {
+				time_start := time.Now()
+				shared.LsdRadixSort(gen.Rec)
+				time_end := int(time.Since(time_start))
+				time_sq += time_end
+
+				fmt.Println("time", int((time_sq)))
+				_ = csvwriter.Write([]string{strconv.Itoa(num_of_n), strconv.Itoa(time_sq)})
+
+				csvwriter.Flush()
+
+				time_sq = 0
+
+			}
+		}
+	}
+}
