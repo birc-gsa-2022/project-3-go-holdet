@@ -1,13 +1,8 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"log"
-	"os"
-	"strconv"
 	"testing"
-	"time"
 
 	"birc.au.dk/gsa/shared"
 )
@@ -97,6 +92,8 @@ func Test_cmp_with_old_handin(t *testing.T) {
 }
 */
 
+/*
+
 func TestMakeDataCons(t *testing.T) {
 	csvFile, err := os.Create("./testdata/construction_time.csv")
 	if err != nil {
@@ -148,8 +145,8 @@ func TestMakeDataSearch(t *testing.T) {
 	time_sq := 0
 
 	//always use the same genome in order to make the sa process go faster.
-	genomes, _ := shared.BuildSomeFastaAndFastq(30000, 0, 1, shared.A, 102)
-	parsedGenomes := shared.GeneralParserStub(genomes, shared.Fasta, 30000+1)
+	genomes, _ := shared.BuildSomeFastaAndFastq(50000, 0, 1, shared.A, 102)
+	parsedGenomes := shared.GeneralParserStub(genomes, shared.Fasta, 50000+1)
 
 	if len(parsedGenomes) != 1 {
 		t.Errorf("should only be 1.")
@@ -158,13 +155,13 @@ func TestMakeDataSearch(t *testing.T) {
 	fmt.Println("creating sa")
 	sa := shared.LsdRadixSort(gen.Rec)
 	fmt.Println("sa created")
-	for i := 1; i < 50; i++ {
+	for i := 1; i < 100; i++ {
 
 		//num_of_n += 500
 		num_of_m += 500
 
-		_, reads := shared.BuildSomeFastaAndFastq(30000, num_of_m, 1, shared.A, 102)
-		parsedReads := shared.GeneralParserStub(reads, shared.Fastq, 4000*num_of_m+1)
+		_, reads := shared.BuildSomeFastaAndFastq(50000, num_of_m, 1, shared.A, 102)
+		parsedReads := shared.GeneralParserStub(reads, shared.Fastq, 40000*num_of_m+1)
 
 		for i := 0; i < 5; i++ {
 
@@ -186,3 +183,4 @@ func TestMakeDataSearch(t *testing.T) {
 
 	}
 }
+*/
