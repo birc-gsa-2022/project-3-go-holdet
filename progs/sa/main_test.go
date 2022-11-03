@@ -1,14 +1,8 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"log"
-	"os"
-	"strconv"
-	"strings"
 	"testing"
-	"time"
 
 	"birc.au.dk/gsa/shared"
 )
@@ -190,7 +184,7 @@ func TestMakeDataSearch(t *testing.T) {
 	}
 }
 */
-
+/*
 func TestMakeDataOneMore(t *testing.T) {
 	csvFile, err := os.Create("./testdata/search_time.csv")
 	if err != nil {
@@ -251,3 +245,4 @@ func TestMakeDataOneMore(t *testing.T) {
 
 	}
 }
+*/

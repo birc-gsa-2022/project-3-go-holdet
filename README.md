@@ -57,7 +57,9 @@ Construction of the algorithm only depends on the size of our genome or string. 
 As mentioned we found it a bit complicated to test the search part of the algoritm.
 When plotting length of search pattern m on x-axis and time / log(n+z) on the y-axis we would expect a linear relationship.
 Since the running times are so fast compared to the time it takes to create the suffix array the measured times are very low which means we have a lot of fluctuations:
+
 ![](figs/search_time_pr3_n=50k.png)
+
 One can however clearly see a linear correlation appear in the bottom of the graph.
 
 We also created another graph only varying on m, keeping both n and z constant. (z=0, n=50000).
