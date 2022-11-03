@@ -28,8 +28,8 @@ Once you have implemented the `sa` program (and tested it to the best of your ab
 In our project we have implemented the O(n²) algorithm that uses radix sort instead of the naive comparison based sorting.
 Bucket sort can be done in time O(n+k), where n is the length of our array (strings of length n have n or n+1 suffixes). The key is our alphabet, which for numbers would be digits from 0-9. In our case the alphabet is unknown but we have taken the liberty to assume that it is no more than a bytesize (256), since most normal characters fits in this range. This means k is constant and we can describe Bucket sort as O(n). The longest string we sort on has length n and therefore we need to do Bucket sort n times, resulting in the running time O(n²).
 
-For the search part we have implemented a binary search function that finds upper bounds and lower bounds. That variant of binary search runs O(m * log(n+z)) 
-This is only the time it takes to return two indexes. The time it would take to get the actual results in SAM or similar would obviously be in z time.
+For the search part we have implemented a binary search function that finds upper bounds and lower bounds. Our variant of binary search runs O(m * log(n). This is the running time for both finding lower and upper bound. We start with array size n and divide search space by two each iteration, thus a total of log n iterations. In each iteration we compare the pattern m, taking up to O(m).  
+This of course only the time it takes to return two indexes. The time it would take to get the actual results in SAM or similar would obviously be bounded by z.
 ## Insights you may have had while implementing the algorithm
 
 One of the most interesting insights was the great difference in running time for construction vs searching.
