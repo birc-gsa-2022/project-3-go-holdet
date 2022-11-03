@@ -27,14 +27,26 @@ Once you have implemented the `sa` program (and tested it to the best of your ab
 
 *Which algorithm did you use to construct the suffix array. What is its running time?*
 
+For this project we choose to implement Radix Sort which runs in O(n^2) time.
+
 ## Insights you may have had while implementing the algorithm
 
 ## Problems encountered if any
+
+We had some troubles identifiying the different edge cases for the binary search algorithm more specifically the upper and lower bound algorithms. 
 
 ## Validation
 
 *How did you validate that the construct and the search algorithm works?*
 
+To validate that the both the SA construction algorithm and binary search works correctly we ran the algorithm on an example string used in the previous project and compared the result from the naive algorithm with the result of our Suffix Array algorithm and verified that they resulted in the same outputs.
+
 ## Running time
 
 *List experiments and results that show that both the construction algorithm and the search algorithm works in the expected running time. Add figures by embedding them here, as you learned how to do in project 1.*
+
+The construction of the SA the expected running time should be O(n^2). To test the expected running time we gave different inputs to our construction implementation based on the english alphabet as this results in more buckets created during the bucket sorting part of the algorithm. The running time for this test can be seen ![](figs/construction_time_pr3.png). Note that the y-axis is the time spent (in ms), divided by the length of the genome given as input as this gives a linear correlation and thus showing the "correct" expected running time on the worst case input. For smaller alphabets less buckets are required thus resulting in a more desireable running time. 
+
+The expected running time of the search algorith should be O(m log n).
+Experiments for the search time were conducted with a fixed n which means that the experiments should show linear behavior depended on the length of the reads. The plot for the search time can be seen in: ![](figs/search:tine:pr3_n=25k.png) where the length of x is fixed at 25,000. Note that y-axis is time (in ms) divided by (m log n). The experiment is conducted on the alphabet of only A's. It is seen in the plot that a line can be visualised through points (with the exception of a few outliers) as the read pattern length increases. This tendency is even more visible in an additional experiment plotted in ![](figs/search:tine:pr3_n=50k.png) where the length of x is fixed at 50,000. 
+
