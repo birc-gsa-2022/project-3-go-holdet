@@ -1,8 +1,14 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"strings"
 	"testing"
+	"time"
 
 	"birc.au.dk/gsa/shared"
 )
@@ -184,3 +190,64 @@ func TestMakeDataSearch(t *testing.T) {
 	}
 }
 */
+
+func TestMakeDataOneMore(t *testing.T) {
+	csvFile, err := os.Create("./testdata/search_time.csv")
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+	csvwriter := csv.NewWriter(csvFile)
+	_ = csvwriter.Write([]string{"x_size", "fixed_log", "fixed_log2"})
+
+	num_of_m := 0
+	num_of_n := 50000
+	time_sq, time_sq2 := 0, 0
+	genome, _ := shared.BuildSomeFastaAndFastq(num_of_n, 500, 1, shared.A, 78)
+	parsedGenomes := shared.GeneralParserStub(genome, shared.Fasta, num_of_n+1)
+
+	gen := parsedGenomes[0].Rec
+	sa := shared.LsdRadixSort(gen)
+	for i := 1; i < 51; i++ {
+
+		num_of_m += 500
+		_, reads := shared.BuildSomeFastaAndFastq(num_of_m, num_of_m, 1, shared.A, 78)
+		var sb strings.Builder
+		sb.WriteString(reads[:len(reads)-1])
+		sb.WriteRune('b')
+		reads = sb.String()
+		sb.Reset()
+		_, reads2 := shared.BuildSomeFastaAndFastq(num_of_m/2, num_of_m/2, 1, shared.A, 78)
+		sb.WriteString(reads2[:len(reads2)-1])
+		sb.WriteRune('b')
+		reads2 = sb.String()
+		sb.Reset()
+		parsedReads := shared.GeneralParserStub(reads, shared.Fastq, num_of_n*num_of_m+1)
+		parsedReads2 := shared.GeneralParserStub(reads2, shared.Fastq, num_of_n*num_of_m+1)
+
+		for i := 0; i < 5; i++ {
+
+			for _, read := range parsedReads {
+				time_start := time.Now()
+				shared.BinarySearch(gen, read.Rec, sa)
+				time_end := int(time.Since(time_start))
+				time_sq += time_end
+			}
+
+			for _, read := range parsedReads2 {
+				time_start := time.Now()
+				shared.BinarySearch(gen, read.Rec, sa)
+				time_end := int(time.Since(time_start))
+				time_sq2 += time_end
+			}
+
+			fmt.Println("time", int((time_sq)))
+			_ = csvwriter.Write([]string{strconv.Itoa(num_of_m), strconv.Itoa(time_sq), strconv.Itoa(time_sq2)})
+
+			csvwriter.Flush()
+
+			time_sq, time_sq2 = 0, 0
+
+		}
+
+	}
+}
